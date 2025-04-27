@@ -1,51 +1,58 @@
 const products = [
   {
-    id: 1,
-    title: "Análisis de Sentimiento en Redes Sociales",
+    id: "market-001",
+    title: "Análisis de Mercado Tech",
     description:
-      "Uso de técnicas de NLP (Natural Language Processing) para analizar las opiniones de los usuarios sobre productos de tecnología en Twitter.",
-    image: "https://via.placeholder.com/300x200",
-    category: "social-media", // Nueva propiedad 'category'
+      "Estudio completo del mercado tecnológico actual con tendencias 2023-2024",
+    price: 299.99,
+    category: "market",
+    image:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
   },
   {
-    id: 2,
-    title: "Predicción de Demanda de Productos en Retail",
-    description:
-      "Modelado predictivo para estimar la demanda de productos en tiendas físicas, usando series temporales y modelos de machine learning.",
-    image: "https://via.placeholder.com/300x200",
-    category: "retail", // Nueva propiedad 'category'
+    id: "social-001",
+    title: "Impacto en Redes Sociales",
+    description: "Métrica detallada del engagement en plataformas digitales",
+    price: 199.99,
+    category: "social-media",
+    image:
+      "https://images.unsplash.com/photo-1611162616475-46b635cb6868?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
   },
   {
-    id: 3,
-    title: "Análisis de Comportamiento de Usuarios en E-commerce",
-    description:
-      "Estudio de patrones de compra en línea y análisis de la retención de clientes mediante clustering y segmentación de usuarios.",
-    image: "https://via.placeholder.com/300x200",
-    category: "e-commerce", // Nueva propiedad 'category'
+    id: "retail-001",
+    title: "Optimización Retail",
+    description: "Soluciones data-driven para cadenas de retail físico",
+    price: 349.99,
+    category: "retail",
+    image:
+      "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
   },
   {
-    id: 4,
-    title: "Estudio de Mercado de Productos de Consumo",
-    description:
-      "Análisis exploratorio de los hábitos de compra de consumidores, usando datos de encuestas y análisis de clusters para segmentar grupos de clientes.",
-    image: "https://via.placeholder.com/300x200",
-    category: "market", // Nueva propiedad 'category'
+    id: "ecom-001",
+    title: "E-commerce Dashboard",
+    description: "Panel de control para tiendas online con análisis predictivo",
+    price: 249.99,
+    category: "e-commerce",
+    image:
+      "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
   },
   {
-    id: 5,
-    title: "Análisis Predictivo para la Industria Automotriz",
-    description:
-      "Predicción de fallos en vehículos basados en datos de sensores utilizando algoritmos de aprendizaje automático.",
-    image: "https://via.placeholder.com/300x200",
-    category: "automotive", // Nueva propiedad 'category'
+    id: "auto-001",
+    title: "Segmentación Automotriz",
+    description: "Estudio de mercado para fabricantes de vehículos",
+    price: 399.99,
+    category: "automotive",
+    image:
+      "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
   },
   {
-    id: 6,
-    title: "Análisis de Riesgo Crediticio",
-    description:
-      "Estudio de riesgos crediticios en el sector bancario usando modelos de scoring de crédito basados en datos históricos de clientes.",
-    image: "https://via.placeholder.com/300x200",
-    category: "finance", // Nueva propiedad 'category'
+    id: "finance-001",
+    title: "Modelo Financiero Predictivo",
+    description: "Análisis de riesgos y proyecciones para sector bancario",
+    price: 499.99,
+    category: "finance",
+    image:
+      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
   },
 ];
 

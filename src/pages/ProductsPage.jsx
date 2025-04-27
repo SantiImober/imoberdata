@@ -3,8 +3,16 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import ProductCard from "../components/ProductCard";
 import productsData from "../data/ProductsData";
+import {
+  FaChartLine,
+  FaStore,
+  FaShoppingCart,
+  FaSearch,
+  FaCar,
+  FaMoneyCheckAlt,
+  FaGlobe,
+} from "react-icons/fa";
 
-// Componentes estilizados (consistentes con LandingPage)
 const Section = styled.section`
   padding: 60px 20px;
   color: #eee;
@@ -87,11 +95,11 @@ const ProductsPage = () => {
   const [category, setCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filtrar productos
   const filteredProducts = productsData.filter((product) => {
     const categoryMatch = category === "all" || product.category === category;
-    const productTitle = product.title ? product.title.toLowerCase() : "";
-    const searchMatch = productTitle.includes(searchTerm.toLowerCase());
+    const searchMatch = product.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     return categoryMatch && searchMatch;
   });
 
@@ -113,43 +121,43 @@ const ProductsPage = () => {
           active={category === "all"}
           onClick={() => setCategory("all")}
         >
-          Todos
+          <FaChartLine /> Todos
         </FilterButton>
         <FilterButton
           active={category === "social-media"}
           onClick={() => setCategory("social-media")}
         >
-          Redes Sociales
+          <FaGlobe /> Redes Sociales
         </FilterButton>
         <FilterButton
           active={category === "retail"}
           onClick={() => setCategory("retail")}
         >
-          Retail
+          <FaStore /> Retail
         </FilterButton>
         <FilterButton
           active={category === "e-commerce"}
           onClick={() => setCategory("e-commerce")}
         >
-          E-commerce
+          <FaShoppingCart /> E-commerce
         </FilterButton>
         <FilterButton
           active={category === "market"}
           onClick={() => setCategory("market")}
         >
-          Mercado
+          <FaSearch /> Mercado
         </FilterButton>
         <FilterButton
           active={category === "automotive"}
           onClick={() => setCategory("automotive")}
         >
-          Automotriz
+          <FaCar /> Automotriz
         </FilterButton>
         <FilterButton
           active={category === "finance"}
           onClick={() => setCategory("finance")}
         >
-          Finanzas
+          <FaMoneyCheckAlt /> Finanzas
         </FilterButton>
       </Filters>
 
@@ -163,7 +171,7 @@ const ProductsPage = () => {
             <ProductCard
               key={product.id}
               product={product}
-              showAddToCart={true} // Asegúrate que tu ProductCard acepte esta prop
+              showAddToCart={true}
             />
           ))
         ) : (

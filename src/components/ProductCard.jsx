@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { FaShoppingCart, FaCheck, FaInfoCircle } from "react-icons/fa";
+import { FaShoppingCart, FaCheck } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 
 const Card = styled(motion.div)`
@@ -15,10 +14,13 @@ const Card = styled(motion.div)`
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
+  border: 1px solid #333;
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 255, 255, 0.2);
+    border-color: #0ff;
   }
 
   .card-image {
@@ -26,6 +28,7 @@ const Card = styled(motion.div)`
     height: 180px;
     object-fit: cover;
     border-bottom: 1px solid #333;
+    transition: all 0.3s ease;
   }
 
   .card-content {
@@ -40,6 +43,7 @@ const Card = styled(motion.div)`
     font-size: 1.25rem;
     min-height: 60px;
     color: #0ff;
+    transition: color 0.3s ease;
   }
 
   p {
@@ -50,15 +54,29 @@ const Card = styled(motion.div)`
     font-size: 0.9rem;
   }
 
+  .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #0ff;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &::before {
+      content: "$";
+      font-size: 0.9rem;
+    }
+  }
+
   .buttons {
     display: flex;
-    gap: 10px;
     margin-top: auto;
   }
 `;
 
 const AddToCartButton = styled(motion.button)`
-  padding: 10px 15px;
+  padding: 12px 15px;
   background-color: #0ff;
   color: #000;
   border: none;
@@ -70,46 +88,53 @@ const AddToCartButton = styled(motion.button)`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  flex-grow: 1;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     background-color: #00cccc;
+    transform: translateY(-2px);
   }
 
   &.added {
     background-color: #4caf50;
   }
-`;
 
-const DetailsButton = styled.button`
-  padding: 10px 15px;
-  background-color: #333;
-  color: #0ff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 1;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
 
-  &:hover {
-    background-color: #444;
+  &:hover::after {
+    transform: translateX(0);
   }
 `;
 
 const ProductCard = ({ product }) => {
   const [addedToCart, setAddedToCart] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
 
   const handleAddToCart = () => {
-    addToCart(product);
+    const productToAdd = {
+      ...product,
+      price: product.price || 0,
+      quantity: 1,
+    };
+
+    addToCart(productToAdd);
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
   };
+
+  const alreadyInCart = isInCart(product.id);
 
   return (
     <Card
@@ -118,36 +143,50 @@ const ProductCard = ({ product }) => {
       transition={{ duration: 0.4 }}
       whileHover={{ scale: 1.02 }}
     >
-      <img src={product.image} alt={product.title} className="card-image" />
+      <img
+        src={
+          product.image ||
+          "https://via.placeholder.com/300x200?text=Imagen+no+disponible"
+        }
+        alt={product.title}
+        className="card-image"
+        onError={(e) => {
+          e.target.src =
+            "https://via.placeholder.com/300x200?text=Imagen+no+disponible";
+        }}
+      />
 
       <div className="card-content">
-        <h3>{product.title}</h3>
-        <p>{product.description}</p>
+        <h3>{product.title || "Producto sin nombre"}</h3>
+        <p>{product.description || "Descripción no disponible"}</p>
+
+        <div className="price">
+          {(product.price || 0).toLocaleString("es-AR", {
+            style: "currency",
+            currency: "ARS",
+            minimumFractionDigits: 2,
+          })}
+        </div>
 
         <div className="buttons">
-          <Link to={`/products/${product.id}`}>
-            <DetailsButton>
-              <FaInfoCircle /> Detalles
-            </DetailsButton>
-          </Link>
-
           <AddToCartButton
             onClick={handleAddToCart}
-            className={addedToCart ? "added" : ""}
+            className={addedToCart || alreadyInCart ? "added" : ""}
             whileTap={{ scale: 0.95 }}
             initial={false}
             animate={{
               scale: addedToCart ? [1, 1.1, 1] : 1,
             }}
             transition={{ duration: 0.3 }}
+            disabled={alreadyInCart}
           >
-            {addedToCart ? (
+            {addedToCart || alreadyInCart ? (
               <>
-                <FaCheck /> Añadido
+                <FaCheck /> {alreadyInCart ? "En carrito" : "Añadido"}
               </>
             ) : (
               <>
-                <FaShoppingCart /> Añadir
+                <FaShoppingCart /> Añadir al carrito
               </>
             )}
           </AddToCartButton>
