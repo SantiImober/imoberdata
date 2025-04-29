@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { motion } from "framer-motion";
 import {
   FaPhone,
@@ -13,12 +14,11 @@ import {
   FaCheck,
 } from "react-icons/fa";
 
-// Estilos
 const ContactSection = styled.section`
   padding: 80px 20px;
   background-color: #111;
   color: #eee;
-  min-height: 80vh;
+  min-height: 100vh;
 `;
 
 const ContactWrapper = styled.div`
@@ -86,23 +86,16 @@ const InputField = styled(Field)`
     border-color: #0ff;
     box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.2);
   }
+
+  &.error {
+    border-color: #ff4444;
+  }
 `;
 
-const SelectField = styled(Field).attrs({ as: "select" })`
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #333;
-  border-radius: 5px;
-  background-color: #333;
-  color: #eee;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: #0ff;
-    box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.2);
-  }
+const ErrorMessageText = styled.div`
+  color: #ff4444;
+  font-size: 0.85rem;
+  margin-top: 5px;
 `;
 
 const SubmitButton = styled(motion.button)`
@@ -180,89 +173,96 @@ const SocialLink = styled.a`
   }
 `;
 
+// COMPONENTE
 const ContactPage = () => {
-  const [showSuccess, setShowSuccess] = React.useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSubmit = async (values, { resetForm, setSubmitting }) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Formulario enviado:", values);
+  const initialValues = {
+    nombre: "",
+    apellido: "",
+    email: "",
+    asunto: "",
+  };
+
+  const validationSchema = Yup.object({
+    nombre: Yup.string().required("Debe ingresar su nombre"),
+    apellido: Yup.string().required("Debe ingresar su apellido"),
+    email: Yup.string()
+      .email("Debe ser un correo válido")
+      .required("Debe ingresar su correo electrónico"),
+    asunto: Yup.string().required("Debe ingresar un asunto"),
+  });
+
+  const handleSubmit = (values, { resetForm, setSubmitting }) => {
+    console.log("Formulario enviado:", values);
+
+    setTimeout(() => {
       setShowSuccess(true);
       resetForm();
       setSubmitting(false);
 
-      setTimeout(() => setShowSuccess(false), 5000);
-    } catch (error) {
-      console.error("Error al enviar:", error);
-      setSubmitting(false);
-    }
+      setTimeout(() => setShowSuccess(false), 4000);
+    }, 1000);
   };
-
-  const asuntoOptions = [
-    { value: "", label: "Seleccione un asunto..." },
-    { value: "atencion_comercial", label: "Atención Comercial" },
-    { value: "soporte_tecnico", label: "Soporte Técnico" },
-    { value: "consultas_generales", label: "Consultas Generales" },
-    { value: "trabaja_con_nosotros", label: "Trabaja con Nosotros" },
-    { value: "otro", label: "Otro" },
-  ];
 
   return (
     <ContactSection>
       <Title>Contáctanos</Title>
       <ContactWrapper>
+        {/* FORMULARIO */}
         <ContactContainer>
           <Subtitle>Envíanos un mensaje</Subtitle>
           <Formik
-            initialValues={{
-              nombre: "",
-              apellido: "",
-              email: "",
-              asunto: "",
-            }}
+            initialValues={initialValues}
+            validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting }) => (
-              <Form>
+            {({ isSubmitting, touched, errors }) => (
+              <Form noValidate>
                 <FormGroup>
-                  <Label htmlFor="nombre">Nombre</Label>
+                  <Label htmlFor="nombre">Nombre *</Label>
                   <InputField
                     type="text"
                     name="nombre"
                     id="nombre"
-                    placeholder="Tu nombre"
+                    className={touched.nombre && errors.nombre ? "error" : ""}
                   />
+                  <ErrorMessage name="nombre" component={ErrorMessageText} />
                 </FormGroup>
 
                 <FormGroup>
-                  <Label htmlFor="apellido">Apellido</Label>
+                  <Label htmlFor="apellido">Apellido *</Label>
                   <InputField
                     type="text"
                     name="apellido"
                     id="apellido"
-                    placeholder="Tu apellido"
+                    className={
+                      touched.apellido && errors.apellido ? "error" : ""
+                    }
                   />
+                  <ErrorMessage name="apellido" component={ErrorMessageText} />
                 </FormGroup>
 
                 <FormGroup>
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">Email *</Label>
                   <InputField
                     type="email"
                     name="email"
                     id="email"
-                    placeholder="tu@email.com"
+                    className={touched.email && errors.email ? "error" : ""}
                   />
+                  <ErrorMessage name="email" component={ErrorMessageText} />
                 </FormGroup>
 
                 <FormGroup>
-                  <Label htmlFor="asunto">Asunto</Label>
-                  <SelectField name="asunto" id="asunto">
-                    {asuntoOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </SelectField>
+                  <Label htmlFor="asunto">Asunto *</Label>
+                  <InputField
+                    type="text"
+                    name="asunto"
+                    id="asunto"
+                    className={touched.asunto && errors.asunto ? "error" : ""}
+                  />
+                  <ErrorMessage name="asunto" component={ErrorMessageText} />
                 </FormGroup>
 
                 <SubmitButton
@@ -287,8 +287,7 @@ const ContactPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
-                    ¡Gracias por contactarnos! Nos comunicaremos con usted
-                    pronto.
+                    ¡Mensaje enviado correctamente!
                   </SuccessMessage>
                 )}
               </Form>
@@ -331,16 +330,16 @@ const ContactPage = () => {
 
           <Subtitle>Síguenos en redes</Subtitle>
           <SocialLinks>
-            <SocialLink href="#" target="_blank">
+            <SocialLink href="#">
               <FaFacebook />
             </SocialLink>
-            <SocialLink href="#" target="_blank">
+            <SocialLink href="#">
               <FaTwitter />
             </SocialLink>
-            <SocialLink href="#" target="_blank">
+            <SocialLink href="#">
               <FaInstagram />
             </SocialLink>
-            <SocialLink href="#" target="_blank">
+            <SocialLink href="#">
               <FaLinkedin />
             </SocialLink>
           </SocialLinks>
